@@ -5,6 +5,8 @@ var concatCSS = require('gulp-concat-css');
 var minifyCSS = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var ftp = require('gulp-ftp');
+var webserver = require('gulp-webserver');
+// var livereload = require('gulp-livereload');
 
 
 var options = {
@@ -13,6 +15,14 @@ var options = {
     host: 'deus.timeweb.ru',
     uploadPath: "/bishkektaxi.tmweb.ru/public_html/taxiAdmin"
 };
+gulp.task('webserver', function() {
+  gulp.src('./')
+    .pipe(webserver({
+      livereload: true,
+      directoryListing: true,
+      open: true
+    }));
+});
 
 gulp.task('default', function () {
     gulp.src('css/*.css')
@@ -33,8 +43,10 @@ gulp.task('ftp', function () {
         // this can be a gulp plugin, gulp.dest, or any kind of stream 
         // here we use a passthrough stream 
         .pipe(gutil.noop());
+        // .pipe(livereload());
 });
 gulp.task('watch', function () {
+    // livereload.listen();
     gulp.watch('./*', ['ftp']);
     gulp.watch('js/*', ['ftp']);
     gulp.watch('css/*', ['ftp']);

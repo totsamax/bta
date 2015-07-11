@@ -44,3 +44,6 @@ main,
     content: "\e062";
     cursor: pointer;
 }
+#newOrderForm{
+    padding-bottom: 20px;
+}
