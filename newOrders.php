@@ -1,0 +1,217 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="">
+<!--<![endif]-->
+
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <link rel="stylesheet" href="bower/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="bower/DataTables/media/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="bower/leaflet/dist/leaflet.css">
+    <link rel="stylesheet" href="css/main.css">
+
+
+</head>
+
+<body>
+    <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Переключить</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/taxiAdmin/">Бишкек Такси</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+
+
+                <form class="navbar-form navbar-right" role="form">
+                    <a id="logout" href="#" class="btn btn-success">Выход</a>
+                </form>
+            </div>
+            <!--/.navbar-collapse -->
+        </div>
+    </nav>
+    <main class="container-fluid">
+        <div class="container">
+            <!--            <h1>Управление системой Bishkek Taxi</h1>-->
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <!--            Переключение вкладок-->
+                    <ul id="myTabs" class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#acceptedOrders" aria-controls="acceptedOrders" role="tab" data-toggle="tab">Необработанные заказы</a>
+                        </li>
+                        <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Принятые заказы</a>
+                        </li>
+                        <li role="presentation"><a href="#payments" aria-controls="payments" role="tab" data-toggle="tab">Пополнение счета</a>
+                        </li>
+
+                    </ul>
+                    <!--            Переключение вкладок конец-->
+                    <!--           Содержимое вкладок-->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="acceptedOrders">
+                            <form class="form-group-sm form-inline" id="payments_form">
+                                <div class="form-group">
+                                    <label class="sr-only" for="payments_amount">Сумма</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon">СОМ</div>
+                                        <input type="number" class="form-control" id="payments_amount" placeholder="Сумма">
+                                    </div>
+                                    <label class="sr-only" for="select">Сумма</label>
+                                    <select class="form-control" id="payments_select">
+
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Пополнить</button>
+                            </form>
+                            <table id="newOrders" class="display table table-bordered" cellspacing="0">
+                                <thead>
+                                    <tr role="row">
+                                        <th><span class="glyphicon glyphicon-map-marker"></span>Показать на карте
+                                        </th>
+                                        <th>Откуда</th>
+                                        <th>Куда</th>
+                                        <th>Когда</th>
+                                        <th>Водитель</th>
+                                        <th>Назначить</th>
+                                    </tr>
+                                </thead>
+                            </table>
+
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane" id="profile">
+                            <table id="orders" class="display table table-bordered" cellspacing="0" width="100%">
+
+                            </table>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="payments">
+                            <div class="col-lg-4">
+                                <h2>Пополнить счет</h2>
+                                <div class="payment_result bg-success">Ваш счет успешно пополнен</div>
+                                <div class="payment_result bg-danger">Не указана сумма или получатель платежа</div>
+                                <form class="form-group-sm" id="payments_form">
+                                    <div class="form-group">
+                                        <label class="sr-only" for="payments_amount">Сумма</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">СОМ</div>
+                                            <input type="number" class="form-control" id="payments_amount" placeholder="Сумма">
+                                        </div>
+                                        <label class="sr-only" for="select">Сумма</label>
+                                        <select class="form-control" id="payments_select">
+
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Пополнить</button>
+                                </form>
+                            </div>
+                            <div class="col-lg-4">
+                                <h2>Добавить водителя</h2>
+                                <div class="add_result bg-success">Водитель успешно добавлен</div>
+                                <div class="add_result bg-danger">Водитель в базе не найден</div>
+                                <form id="addDriver">
+                                    <div class="form-group">
+                                        <label class="sr-only" for="driverPhoneNumber">996 770 123456 </label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">+</div>
+                                            <input type="tel" class="form-control" id="driverPhoneNumber" placeholder="Номер водителя">
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Добавить водителя</button>
+                                </form>
+                            </div>
+                            <div class="col-lg-4">
+                                <h2>Удалить водителя</h2>
+                                <div class="delete_result bg-success">Водитель успешно удален</div>
+                                <div class="delete_result bg-danger">Водитель в базе не найден</div>
+                                <form id="deleteDriver">
+                                    <div class="form-group">
+                                        <label class="sr-only" for="deleteDriver_name">Выберите водителя для удаления </label>
+                                        <select class="form-control" id="deleteDriver_name">
+
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Удалить водителя</button>
+                                </form>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div id="map"></div>
+
+            </div>
+        </div>
+        </div>
+        <div class="modal fade" id="loginModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-body">
+                        <form class="form-signin" id="loginForm">
+                            <h2 class="form-signin-heading">Пожалуйста, укажите ваши Логин и Пароль</h2>
+                            <label for="inputEmail" class="sr-only">Ваш Логин</label>
+                            <input type="text" name="login" id="inputLogin" class="form-control" placeholder="Логин" required autofocus>
+                            <label for="inputPassword" class="sr-only">Пароль</label>
+                            <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Пароль" required>
+                            <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js"></script>
+    <script>
+        window.jQuery || document.write('<script src="bower/jquery/dist/jquery.min.js"><\/script>');
+    </script>
+    <script src="bower/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower/DataTables/media/js/jquery.dataTables.js"></script>
+    <script src="bower/leaflet/dist/leaflet.js"></script>
+    <script src="bower/md5/src/md5.js"></script>
+    <script src="bower/jquery-cookie/jquery.cookie.js"></script>
+    <script src="js/newOrders.js"></script>
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+    <script>
+        (function (b, o, i, l, e, r) {
+            b.GoogleAnalyticsObject = l;
+            b[l] || (b[l] =
+                function () {
+                    (b[l].q = b[l].q || []).push(arguments)
+                });
+            b[l].l = +new Date;
+            e = o.createElement(i);
+            r = o.getElementsByTagName(i)[0];
+            e.src = '//www.google-analytics.com/analytics.js';
+            r.parentNode.insertBefore(e, r)
+        }(window, document, 'script', 'ga'));
+        ga('create', 'UA-XXXXX-X', 'auto');
+        ga('send', 'pageview');
+    </script>
+</body>
+
+</html>
